@@ -3,86 +3,94 @@
 
 using namespace std;
 
-
-
 // Function to display game interface
-void displayGameInterface(int *score,bool *isShift, Shape* nextShape, Shape* currentShape, ListShape& shapeList) {
-    char userchoice;
+static void displayGameInterface(int& score, bool& newShapeNeeded, Shape*& nextShape, Shape*& currentShape, ListShape& shapeList) {
 
-    clearScreen();
+	int userChoice;
 
-    setCursorPosition(2, 2);
-    cout << "Command:  "<<endl;
-    cout << "           left arrow : insert in the start " << endl;
-    cout << "           right arrow : insert in the end " << endl;
-    cout << "           up arrow : to choose the wanted color for shift " << endl;
-    cout << "           down arrow : to choose the wanted shape for shift " << endl;
+	clearScreen();
+
+	setCursorPosition(2, 2);
+	cout << "Command:  " << endl;
+	cout << "           a : insert in the start " << endl;
+	cout << "           d : insert in the end " << endl;
+	cout << "           w : to choose the wanted color shift " << endl;
+	cout << "           s : to choose the wanted shape shift " << endl;
+
+	setCursorPosition(2, 9);
+	cout << "---------   Score: " << score << "    -------------";
+
+	setCursorPosition(50, 10);
+	cout << "Next Shape:  ";
+	if (nextShape != nullptr)
+		nextShape->printShape();
+
+	setCursorPosition(2, 10);
+	cout << "Current Shape: ";
+	if (currentShape != nullptr)
+		currentShape->printShape();
+
+	// Display list of shapes
+	setCursorPosition(2, 15);
+	cout << "Shape List: (" << shapeList.shapeCount << ") " << endl;
+	setCursorPosition(2, 17);
+	shapeList.printList();
+
+	// Prompt the user to choose the position
+	setCursorPosition(2, 20);
+	userChoice = _getch();
+	userChoice = tolower(userChoice);
+
+	switch (userChoice) {
+
+	case 'a':
+		shapeList.appendShape(currentShape, 's');
+		newShapeNeeded = true;
+		break;
+	case 'd':
+		shapeList.appendShape(currentShape, 'e');
+		newShapeNeeded = true;
+		break;
+	case 's':
+		shapeList.shiftList();
+		newShapeNeeded = false;
+		break;
+	default:
+			newShapeNeeded = false;
+			break;
+	}
 
 
-    setCursorPosition(30, 5);
-    cout << "Score: " << *score;
 
+	shapeList.checkShapes(&score);
 
-    setCursorPosition(50, 10);
-    cout << "Next Shape:  ??????";
-    //nextShape->printShape();
-
-    setCursorPosition(2, 10);
-    cout << "Current Shape: ";
-    currentShape->printShape();
-
-    // Display list of shapes
-    setCursorPosition(2, 15);
-    cout << "Shape List: (" << shapeList.shapeCount << ") " << endl;
-    setCursorPosition(2, 17);
-
-    shapeList.printListShape();
-
-    // Prompt the user to choose the position
-    setCursorPosition(2, 20);
-    userchoice = _getch();
-
-    if (userchoice == 's' || userchoice == 'S')
-    {
-        *isShift = true;
-        shapeList.shift();
-    }
-
-    else if (userchoice == 'a' || userchoice == 'A')
-    {
-        shapeList.start->printShapeWithSameColor();
-    }
-
-    else if (userchoice == 'r' || userchoice == 'R' || userchoice == 'l' || userchoice == 'L')
-        shapeList.appendShape(currentShape, userchoice);
-    shapeList.checkShapes(score);
-
+	if (newShapeNeeded) {
+		currentShape = nextShape;
+		nextShape = new Shape();
+	}
 }
-
 
 int main() {
-    srand(static_cast<unsigned int>(time(0)));
-    ListShape shapeList;
-    int score = 0000;
-    bool isShift = false;
-
-    // Create the next shape
-    Shape* nextShape = nullptr;
-    Shape* currentShape = new Shape();
-
-    while (shapeList.shapeCount < 15) {
-       
-
-        displayGameInterface(&score , &isShift,nextShape, currentShape, shapeList);
-
-        //nextShape = currentShape;
-        if(!isShift)
-            currentShape = new Shape();
+	srand(static_cast<unsigned int>(time(0)));
+	ListShape shapeList;
+	int score = 0;
+	bool newShapeNeeded = true;
 
 
-    }
+	// Create the next shape
+	Shape* nextShape = new Shape();
+	Shape* currentShape = new Shape();
 
-    shapeList.printListShape();
+	while (shapeList.shapeCount < 15) {
+		displayGameInterface(score, newShapeNeeded, nextShape, currentShape, shapeList);
+	}
 
-    return 0;
+	shapeList.printList();
+
+	// Clean up dynamically allocated memory
+	delete currentShape;
+	delete nextShape;
+
+	return 0;
 }
+

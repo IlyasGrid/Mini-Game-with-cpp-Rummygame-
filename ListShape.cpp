@@ -1,171 +1,156 @@
 #include "ListShape.h"
+#include <iostream>
 
-bool ListShape::isEmpty() {
-    if(start == nullptr)
-        cout << "empty list" << endl;
-    return start == nullptr;
+bool ListShape::isEmpty() const {
+	if (start == nullptr)
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void ListShape::appendShapeAtStart(Shape* shape) {
+
+		shape->next = start;
+		start->previous = shape;
+		start = shape;
+		shape->previous = nullptr;
+	
+
+}
+
+void ListShape::appendShapeAtEnd(Shape* shape) {
+
+		end->next = shape;
+		shape->previous = end;
+		end = shape;
+		shape->next = nullptr;
+
 }
 
 void ListShape::appendShape(Shape* shape, char where) {
+	if (isEmpty()) {
+		start = shape;
+		end = shape;
+		shape->next = nullptr;
+		shape->previous = nullptr;
+	}
 
-    if (start == nullptr) {
-        start = shape;
-        end = shape;
-        shapeCount++;
-    }
+	if (where == 's' || where == 'S')
+		appendShapeAtStart(shape);
+	if (where == 'e' || where == 'E')
+		appendShapeAtEnd(shape);
 
-    else {
-        if (where == 'r' || where == 'R') { // Append at end
-            shape->previous = end; 
-            end->next = shape;
-            end = shape;
-            shapeCount++;
+	shapeCount++;
 
-            Shape* current = end->previous;          
+}
 
-            while (current != nullptr)
-            {
-                if (shape->color == current->color) {
-                    shape->previousColor = current;
-                    current->nextColor = shape;
-                    return;
-                }
-                current = current->previous;
-            }
+void ListShape::checkShapes(int* score) {
 
+	cout << "cheking..." << endl;
+	if (isEmpty() || shapeCount < 3) {
+		return;
+	}
 
-        }
-        else if (where == 'l' || where == 'L') { // Append at beginning
-            shape->next = start;
-            start->previous = shape;
-            start = shape;
-            shapeCount++;
+	Shape* current = start;
+	while (current != nullptr && current->next != nullptr && current->next->next != nullptr) {
+		bool sameColor = (current->color == current->next->color) && (current->color == current->next->next->color);
+		bool sameName = (current->name == current->next->name) && (current->name == current->next->next->name);
 
-
-            Shape* current = start->next;
-            
-            while (current != nullptr)
-            {
-                if (shape->color == current->color) {
-                    shape->nextColor = current;
-                    current->previousColor = shape;
-                    return;
-                }
-                current = current->next;
-            }
-        }
-    }
+		if (sameColor && sameName) {
+			(*score) += 1000;
+			removeShape(current->next->next);
+			removeShape(current->next);
+			Shape* temp = current->next;
+			removeShape(current);
+			current = temp;
+		}
+		else if (sameColor || sameName) {
+			(*score) += 300;
+			removeShape(current->next->next);
+			removeShape(current->next);
+			Shape* temp = current->next;
+			removeShape(current);
+			current = temp;
+		}
+		else {
+			current = current->next;
+		}
+	}
 }
 
 
-void ListShape::removeShape(Shape* shapeToRemove) {
-    if (start == nullptr)
-        return; // List is empty
+void ListShape::removeShape(Shape* shape) {
+	// Vérifier si la forme existe dans la liste
+	if (shape == nullptr || this->isEmpty()) {
+		return;
+	}
 
-    Shape* current = start;
-    Shape* prev = nullptr;
+	// Cas 1: La forme à supprimer est la tête de la liste
+	if (shape == start) {
+		start = shape->next;
+		if (start != nullptr) {
+			start->previous = nullptr;
+		}
+		else {
+			end = nullptr; // La liste est devenue vide
+		}
+	}
 
-    while (current != nullptr && current != shapeToRemove) {
-        prev = current;
-        current = current->next;
-    }
+	// Cas 2: La forme à supprimer est la queue de la liste
+	else if (shape == end) {
+		end = shape->previous;
+		if (end != nullptr) {
+			end->next = nullptr;
+		}
+		else {
+			start = nullptr; // La liste est devenue vide
+		}
+	}
+	// Cas 3: La forme à supprimer est dans le milieu de la liste
+	else {
+		Shape* prev = shape->previous;
+		Shape* next = shape->next;
+		prev->next = next;
+		next->previous = prev;
+	}
 
-    if (current == nullptr)
-        return; // Shape to remove not found
+	// Supprimer les liens de la forme
+	shape->previous = nullptr;
+	shape->next = nullptr;
 
-    if (prev != nullptr) {
-        prev->next = current->next;
-    }
-    else {
-        start = current->next;
-    }
-
-    if (current == end) {
-        end = prev; // Update end pointer if removing the last shape
-    }
-    delete current;
-    shapeCount--;
+	// Libérer la mémoire de la forme si nécessaire
+	delete shape;
+	shapeCount--;
+	cout << "removed" << endl;
 }
 
+void ListShape::printList() const {
+	Shape* current = start;
+	while (current != nullptr) {
+		current->printShape();
+		current = current->next;
+	}
 
-
-
-int ListShape::checkShapes(int *score) {
-
-    if (start == nullptr || start->next == nullptr || start->next->next == nullptr)
-        return -1; // Not enough shapes to compare
-
-    Shape* current = start;
-
-    while (current->next->next != nullptr) {
-
-        if (current->color == current->next->color &&
-            current->next->next->color == current->color &&
-            current->name == current->next->name &&
-            current->next->next->name== current->name)
-
-        {
-            this->removeShape(current->next->next);
-            this->removeShape(current->next);
-            this->removeShape(current);
-
-            (*score) += 1000;
-            return 3; // Same color and shape for the two previous shapes
-        }
-
-
-        if (current->color == current->next->color &&
-            current->next->next->color == current->color)
-        {
-            this->removeShape(current->next->next);
-            this->removeShape(current->next);
-            this->removeShape(current);
-            (*score) += 300;
-            return 1; // Same color for the two previous shapes
-        }
-
-        if (current->name == current->next->name &&
-            current->next->next->name == current->name)
-        {
-            this->removeShape(current->next->next);
-            this->removeShape(current->next);
-            this->removeShape(current);
-            (*score) += 300;
-            return 2; // Same shape for the two previous shapes
-        }
-
-        current = current->next;
-    }
-
-    return -1; // No matching condition found
 }
 
+void ListShape::shiftList() {
+	if (isEmpty()) {
+		return;  // La liste est vide, rien à faire
+	}
 
-void ListShape::printListShape() const{
-    Shape* current = start;
+		// Déplacer la tête vers la queue
+		Shape* temp = start;
 
-    while (current != nullptr) {
-        current->printShape();
-        current = current->next;
-    }
+		start = start->next;
+
+		start->previous = nullptr;
+		end->next = temp;
+		temp->next = nullptr;
+		temp->previous = end;
+		end = temp;
+
+
 }
-
-void ListShape::shift() {
-    if (isEmpty() || shapeCount == 1) {
-        // No need to shift if the list is empty or has only one shape
-        return;
-    }
-
-    // Move the last shape to the beginning
-    Shape* lastShape = end;
-    end = lastShape->previous;
-    end->next = nullptr;
-
-    lastShape->next = start;
-    lastShape->previous = nullptr;
-    start->previous = lastShape;
-    start = lastShape;
-}
-
-
-

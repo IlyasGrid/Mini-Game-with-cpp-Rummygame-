@@ -7,21 +7,21 @@ class Shape {
 public:
     string color;
     string name;
+
     Shape* next;
     Shape* previous;
+
     Shape* nextColor;
-    Shape* previousColor;
-    Shape* nextshape;
-    Shape* previousshape;
+    Shape* nextShape;
+
 
 
     Shape(); // to generate random shape
+    Shape(string shapeName,string shapeColor);
 
     ~Shape();
 
-    void printShape() const;
-    void printShapeWithSameColor();
-    void printShapeWithSameShape();
+    void printShape() const; // should print the shape colored 
+    
 
-    void swapShapes(Shape* other);
 };
