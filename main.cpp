@@ -52,7 +52,11 @@ static void displayGameInterface(int& score, bool& newShapeNeeded, Shape*& nextS
 		newShapeNeeded = true;
 		break;
 	case 's':
-		shapeList.shiftList();
+		shapeList.shiftColor("red");
+		newShapeNeeded = false;
+		break;
+	case 'w':
+		shapeList.shiftShapes("SQUARE");
 		newShapeNeeded = false;
 		break;
 	default:

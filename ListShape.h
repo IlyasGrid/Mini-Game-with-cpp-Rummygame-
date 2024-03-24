@@ -36,7 +36,11 @@ public:
 
 	void shiftList(); // it shift the shape with all its pointer
 
+	void shiftColor(string color);
 
+	void shiftShapes(string name);
+
+	void eastablishConnection();
 
 
 };

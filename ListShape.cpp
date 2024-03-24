@@ -13,20 +13,20 @@ bool ListShape::isEmpty() const {
 
 void ListShape::appendShapeAtStart(Shape* shape) {
 
-		shape->next = start;
-		start->previous = shape;
-		start = shape;
-		shape->previous = nullptr;
-	
+	shape->next = start;
+	start->previous = shape;
+	start = shape;
+	shape->previous = nullptr;
+
 
 }
 
 void ListShape::appendShapeAtEnd(Shape* shape) {
 
-		end->next = shape;
-		shape->previous = end;
-		end = shape;
-		shape->next = nullptr;
+	end->next = shape;
+	shape->previous = end;
+	end = shape;
+	shape->next = nullptr;
 
 }
 
@@ -43,17 +43,16 @@ void ListShape::appendShape(Shape* shape, char where) {
 	if (where == 'e' || where == 'E')
 		appendShapeAtEnd(shape);
 
+	eastablishConnection();
 	shapeCount++;
 
 }
 
 void ListShape::checkShapes(int* score) {
 
-	cout << "cheking..." << endl;
 	if (isEmpty() || shapeCount < 3) {
 		return;
 	}
-
 	Shape* current = start;
 	while (current != nullptr && current->next != nullptr && current->next->next != nullptr) {
 		bool sameColor = (current->color == current->next->color) && (current->color == current->next->next->color);
@@ -124,7 +123,8 @@ void ListShape::removeShape(Shape* shape) {
 	// Libérer la mémoire de la forme si nécessaire
 	delete shape;
 	shapeCount--;
-	cout << "removed" << endl;
+
+	eastablishConnection();
 }
 
 void ListShape::printList() const {
@@ -133,24 +133,88 @@ void ListShape::printList() const {
 		current->printShape();
 		current = current->next;
 	}
-
 }
 
 void ListShape::shiftList() {
+
 	if (isEmpty()) {
 		return;  // La liste est vide, rien à faire
 	}
 
-		// Déplacer la tête vers la queue
-		Shape* temp = start;
+	// Déplacer la tête vers la queue
+	Shape* temp = start;
 
-		start = start->next;
+	start = start->next;
 
-		start->previous = nullptr;
-		end->next = temp;
-		temp->next = nullptr;
-		temp->previous = end;
-		end = temp;
+	start->previous = nullptr;
+	end->next = temp;
+	temp->next = nullptr;
+	temp->previous = end;
+	end = temp;
 
 
+	eastablishConnection();
+
+}
+
+
+void ListShape::shiftColor(string color) {
+
+	Shape* current = start;
+	while (current != nullptr) {
+		if (current->color == color)
+			break;
+		current = current->next;
+	}
+
+	while (current != nullptr) {
+		current->printShape();
+		current = current->nextColor;
+	}
+
+}
+
+void ListShape::shiftShapes(string name) {
+	Shape* current = start;
+	while (current != nullptr) {
+		if (current->name == name)
+			break;
+		current = current->next;
+	}
+
+	while (current != nullptr) {
+		current->printShape();
+		current = current->nextShape;
+	}
+}
+
+void ListShape::eastablishConnection() {
+	if (isEmpty()) {
+		return;
+	}
+
+	Shape* current = start;
+	while (current != nullptr) {
+		current->nextColor = nullptr;
+		current->nextShape = nullptr;
+
+		Shape* helper = current->next;
+		while (helper != nullptr) {
+			if (helper->color == current->color && current->nextColor == nullptr) {
+				current->nextColor = helper;
+			}
+
+			if (helper->name == current->name && current->nextShape == nullptr) {
+				current->nextShape = helper;
+			}
+
+			if (current->nextColor != nullptr && current->nextShape != nullptr) {
+				break;
+			}
+
+			helper = helper->next;
+		}
+
+		current = current->next;
+	}
 }
