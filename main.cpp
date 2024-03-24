@@ -30,7 +30,6 @@ void chooseColorForShift(ListShape& shapeList) {
 	}
 }
 
-
 void chooseNameForShift(ListShape& shapeList) {
 	cout << "	choose : \n		1-SQUARE\n		2-TRIANGLE\n		3-CIRCLE\n		4-LOSANGE" << endl;
 	char choise = getchar();

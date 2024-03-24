@@ -80,7 +80,6 @@ void ListShape::checkShapes(int* score) {
 	}
 }
 
-
 void ListShape::removeShape(Shape* shape) {
 	// Vérifier si la forme existe dans la liste
 	if (shape == nullptr || this->isEmpty()) {
@@ -156,7 +155,6 @@ void ListShape::shiftList() {
 	establishShapeConnections();
 
 }
-
 
 void ListShape::shiftShapesWithSameColor(string color) {
 	if (isEmpty()) {
@@ -238,7 +236,6 @@ void ListShape::shiftShapesWithSameName(string name) {
 		current = current->nextShape;
 	}
 }
-
 
 void ListShape::establishShapeConnections() {
 	if (isEmpty()) {
