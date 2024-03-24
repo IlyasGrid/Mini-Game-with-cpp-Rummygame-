@@ -3,6 +3,57 @@
 
 using namespace std;
 
+void chooseColorForShift(ListShape& shapeList) {
+	cout << "	choose : \n		1-red\n		2-blue\n		3-green\n		4-yellow" << endl;
+	Sleep(1000);
+	char choise = getchar();
+	switch (choise)
+	{
+	case '1':
+
+		shapeList.shiftColor("red");
+		break;
+	case '2':
+		shapeList.shiftColor("blue");
+		break;
+	case '3':
+		shapeList.shiftColor("green");
+		break;
+	case '4':
+		shapeList.shiftColor("yellow");
+		break;
+	default:
+		chooseColorForShift(shapeList);
+		break;
+	}
+}
+
+
+void chooseNameForShift(ListShape& shapeList) {
+	cout << "	choose : \n		1-SQUARE\n		2-TRIANGLE\n		3-CIRCLE\n		4-LOSANGE" << endl;
+	Sleep(1000);
+	char choise = getchar();
+	switch (choise)
+	{
+	case '1':
+		shapeList.shiftShapes("SQUARE");
+		break;
+	case '2':
+		shapeList.shiftShapes("TRIANGLE");
+		break;
+	case '3':
+		shapeList.shiftShapes("CIRCLE");
+		break;
+	case '4':
+		shapeList.shiftShapes("LOSANGE");
+		break;
+	default:
+		chooseNameForShift(shapeList);
+		break;
+	}
+}
+
+
 // Function to display game interface
 static void displayGameInterface(int& score, bool& newShapeNeeded, Shape*& nextShape, Shape*& currentShape, ListShape& shapeList) {
 
@@ -52,11 +103,12 @@ static void displayGameInterface(int& score, bool& newShapeNeeded, Shape*& nextS
 		newShapeNeeded = true;
 		break;
 	case 's':
-		shapeList.shiftColor("red");
+
+		chooseColorForShift(shapeList);
 		newShapeNeeded = false;
 		break;
 	case 'w':
-		shapeList.shiftShapes("SQUARE");
+		chooseNameForShift(shapeList);
 		newShapeNeeded = false;
 		break;
 	default:

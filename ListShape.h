@@ -40,7 +40,13 @@ public:
 
 	void shiftShapes(string name);
 
+	void printShapesWithSameColor(string color);
+
+	void printShapesWithSameName(string name);
+
 	void eastablishConnection();
 
+	void swapTwoShapes(Shape* shape1, Shape* shape2);
+	void swapAdjacentShapes(Shape* shape1, Shape* shape2);
 
 };
