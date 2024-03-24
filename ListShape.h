@@ -36,17 +36,15 @@ public:
 
 	void shiftList(); // it shift the shape with all its pointer
 
-	void shiftColor(string color);
+	void shiftShapesWithSameColor(string color);
 
-	void shiftShapes(string name);
+	void shiftShapesWithSameName(string name);
 
-	void printShapesWithSameColor(string color);
+	void printShapesByColor(string color);
 
-	void printShapesWithSameName(string name);
+	void printShapesByName(string name);
 
-	void eastablishConnection();
+	void establishShapeConnections();
 
-	void swapTwoShapes(Shape* shape1, Shape* shape2);
-	void swapAdjacentShapes(Shape* shape1, Shape* shape2);
 
 };

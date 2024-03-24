@@ -13,16 +13,16 @@ void chooseColorForShift(ListShape& shapeList) {
 	{
 	case '1':
 
-		shapeList.shiftColor("red");
+		shapeList.shiftShapesWithSameColor("red");
 		break;
 	case '2':
-		shapeList.shiftColor("blue");
+		shapeList.shiftShapesWithSameColor("blue");
 		break;
 	case '3':
-		shapeList.shiftColor("green");
+		shapeList.shiftShapesWithSameColor("green");
 		break;
 	case '4':
-		shapeList.shiftColor("yellow");
+		shapeList.shiftShapesWithSameColor("yellow");
 		break;
 	default:
 		chooseColorForShift(shapeList);
@@ -38,16 +38,16 @@ void chooseNameForShift(ListShape& shapeList) {
 	switch (choise)
 	{
 	case '1':
-		shapeList.shiftShapes("SQUARE");
+		shapeList.shiftShapesWithSameName("SQUARE");
 		break;
 	case '2':
-		shapeList.shiftShapes("TRIANGLE");
+		shapeList.shiftShapesWithSameName("TRIANGLE");
 		break;
 	case '3':
-		shapeList.shiftShapes("CIRCLE");
+		shapeList.shiftShapesWithSameName("CIRCLE");
 		break;
 	case '4':
-		shapeList.shiftShapes("LOSANGE");
+		shapeList.shiftShapesWithSameName("LOSANGE");
 		break;
 	default:
 		chooseNameForShift(shapeList);

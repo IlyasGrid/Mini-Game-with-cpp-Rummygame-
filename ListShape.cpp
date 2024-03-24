@@ -43,7 +43,7 @@ void ListShape::appendShape(Shape* shape, char where) {
 	if (where == 'e' || where == 'E')
 		appendShapeAtEnd(shape);
 
-	eastablishConnection();
+	establishShapeConnections();
 	shapeCount++;
 
 }
@@ -124,7 +124,7 @@ void ListShape::removeShape(Shape* shape) {
 	delete shape;
 	shapeCount--;
 
-	eastablishConnection();
+	establishShapeConnections();
 }
 
 void ListShape::printList() const {
@@ -153,12 +153,12 @@ void ListShape::shiftList() {
 	end = temp;
 
 
-	eastablishConnection();
+	establishShapeConnections();
 
 }
 
 
-void ListShape::shiftColor(string color) {
+void ListShape::shiftShapesWithSameColor(string color) {
 	if (isEmpty()) {
 		return;
 	}
@@ -196,11 +196,11 @@ void ListShape::shiftColor(string color) {
 	}
 
 
-	eastablishConnection();
+	establishShapeConnections();
 
 }
 
-void ListShape::shiftShapes(string name) {
+void ListShape::shiftShapesWithSameName(string name) {
 
 	if (isEmpty()) {
 		return;
@@ -240,9 +240,7 @@ void ListShape::shiftShapes(string name) {
 }
 
 
-
-
-void ListShape::eastablishConnection() {
+void ListShape::establishShapeConnections() {
 	if (isEmpty()) {
 		return;
 	}
@@ -273,7 +271,7 @@ void ListShape::eastablishConnection() {
 	}
 }
 
-void ListShape::printShapesWithSameColor(string color) {
+void ListShape::printShapesByColor(string color) {
 
 	Shape* current = start;
 	while (current != nullptr) {
@@ -289,7 +287,7 @@ void ListShape::printShapesWithSameColor(string color) {
 
 }
 
-void ListShape::printShapesWithSameName(string name) {
+void ListShape::printShapesByName(string name) {
 	Shape* current = start;
 	while (current != nullptr) {
 		if (current->name == name)
@@ -301,77 +299,4 @@ void ListShape::printShapesWithSameName(string name) {
 		current->printShape();
 		current = current->nextShape;
 	}
-}
-
-
-void ListShape::swapTwoShapes(Shape* shape1, Shape* shape2) {
-	if (shape1 == nullptr || shape2 == nullptr || shape1 == shape2) {
-		return; // Invalid shapes or same shape
-	}
-
-	// Case 1: shape1 and shape2 are adjacent
-	if (shape1->next == shape2) {
-		swapAdjacentShapes(shape1, shape2);
-	}
-	else if (shape2->next == shape1) {
-		swapAdjacentShapes(shape2, shape1);
-	}
-	else {
-		// Case 2: shape1 and shape2 are not adjacent
-		Shape* prev1 = nullptr;
-		Shape* prev2 = nullptr;
-		Shape* current = start;
-
-		// Find the previous shapes of shape1 and shape2
-		while (current != nullptr) {
-			if (current->next == shape1) {
-				prev1 = current;
-			}
-			else if (current->next == shape2) {
-				prev2 = current;
-			}
-			current = current->next;
-		}
-
-		// Swap the shapes
-		if (prev1 != nullptr) {
-			prev1->next = shape2;
-		}
-		else {
-			start = shape2;
-		}
-		if (prev2 != nullptr) {
-			prev2->next = shape1;
-		}
-		else {
-			start = shape1;
-		}
-		Shape* temp = shape1->next;
-		shape1->next = shape2->next;
-		shape2->next = temp;
-		temp = shape1->previous;
-		shape1->previous = shape2->previous;
-		shape2->previous = temp;
-	}
-}
-
-void ListShape::swapAdjacentShapes(Shape* shape1, Shape* shape2) {
-	if (shape1 == start) {
-		start = shape2;
-	}
-	else {
-		shape1->previous->next = shape2;
-	}
-	if (shape2 == end) {
-		end = shape1;
-	}
-	else {
-		shape2->next->previous = shape1;
-	}
-	Shape* temp = shape2->next;
-	shape2->next = shape1;
-	shape1->next = temp;
-	temp = shape1->previous;
-	shape1->previous = shape2;
-	shape2->previous = temp;
 }
