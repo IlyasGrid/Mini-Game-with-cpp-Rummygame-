@@ -5,8 +5,10 @@ using namespace std;
 
 void chooseColorForShift(ListShape& shapeList) {
 	cout << "	choose : \n		1-red\n		2-blue\n		3-green\n		4-yellow" << endl;
-	Sleep(1000);
+
 	char choise = getchar();
+	std::cin.ignore();
+
 	switch (choise)
 	{
 	case '1':
@@ -31,8 +33,8 @@ void chooseColorForShift(ListShape& shapeList) {
 
 void chooseNameForShift(ListShape& shapeList) {
 	cout << "	choose : \n		1-SQUARE\n		2-TRIANGLE\n		3-CIRCLE\n		4-LOSANGE" << endl;
-	Sleep(1000);
 	char choise = getchar();
+	std::cin.ignore();
 	switch (choise)
 	{
 	case '1':
@@ -115,8 +117,6 @@ static void displayGameInterface(int& score, bool& newShapeNeeded, Shape*& nextS
 			newShapeNeeded = false;
 			break;
 	}
-
-
 
 	shapeList.checkShapes(&score);
 
